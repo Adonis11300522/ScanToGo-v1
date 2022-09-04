@@ -47,12 +47,23 @@ const CustomSidebarMenu = (props) => {
         <DrawerItem
           label={({ color }) =>
             <View style={{ flexDirection: 'row' }}>
-              <Ionicons name="settings" size={24} color="white" />
+              <Ionicons name="cog" size={24} color="white" />
               <Text style={{ marginLeft: 10, color: 'white' }}>User Info</Text>
             </View>
           }
           onPress={() => {
-            props.navigation.navigate('settingScreenStack');
+            props.navigation.navigate('SettingScreenStack');
+          }}
+        />
+        <DrawerItem
+          label={({ color }) =>
+            <View style={{ flexDirection: 'row' }}>
+              <Ionicons name="cube" size={24} color="white" />
+              <Text style={{ marginLeft: 10, color: 'white' }}>Membership</Text>
+            </View>
+          }
+          onPress={() => {
+            props.navigation.navigate('MemberShipScreenStack');
           }}
         />
         <DrawerItem

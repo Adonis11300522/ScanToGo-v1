@@ -14,7 +14,12 @@ import SplashScreen from './Screen/SplashScreen';
 import LoginScreen from './Screen/LoginScreen';
 import RegisterScreen from './Screen/RegisterScreen';
 import DrawerNavigationRoutes from './Screen/DrawerNavigationRoutes';
-import QrscannerScreen from './Screen/QrscannerScreen';
+import ScanScreen from './Screen/ScanScreen';
+import ForgotPasswordScreen from './Screen/ForgotPasswordScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Localization from 'expo-localization';
+import { I18n } from 'i18n-js';
+import Language from './assets/Language.json';
 
 const Stack = createStackNavigator();
 
@@ -42,6 +47,20 @@ const Auth = () => {
           },
         }}
       />
+      <Stack.Screen
+        name="ForgotPasswordScreen"
+        component={ForgotPasswordScreen}
+        options={{
+          title: 'ForgotPassword', //Set Header Title
+          headerStyle: {
+            backgroundColor: '#0049EE', //Set Header color
+          },
+          headerTintColor: '#fff', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -49,6 +68,18 @@ const Auth = () => {
 /* Switch Navigator for those screens which needs to be switched only once
   and we don't want to switch back once we switch from them to the next one */
 const App = () => {
+
+  const i18n = new I18n(Language);
+  i18n.locale = Localization.locale;
+  i18n.enableFallback = true;
+
+  const setLocal = async () => {
+    await AsyncStorage.setItem('locale', i18n.locale);
+    console.log(i18n.t("BUTTONS.ForgotPassword"));
+  }
+
+  setLocal();
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen">
@@ -66,8 +97,8 @@ const App = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="QrScreen"
-          component={QrscannerScreen}
+          name="ScanScreen"
+          component={ScanScreen}
           options={{ headerShown: false }}
         />
         {/* Navigation Drawer as a landing page */}

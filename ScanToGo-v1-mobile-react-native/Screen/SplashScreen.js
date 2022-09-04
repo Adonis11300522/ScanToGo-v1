@@ -24,9 +24,6 @@ const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
       setAnimating(false);
-      //Check if user_id is set or not
-      //If not then send for Authentication
-      //else send to Home Screen
       AsyncStorage.getItem('user_email').then((value) => {
         if (value === null) {
           navigation.replace('Auth');

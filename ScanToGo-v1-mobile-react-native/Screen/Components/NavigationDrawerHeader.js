@@ -96,9 +96,9 @@ const NavigationDrawerHeader = (props) => {
           <FontAwesome name="search" size={24} color="white" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.toolItem} onPress={() => {
-          navigation.push('QrScreen')
+          navigation.push('ScanScreen')
         }}>
-          <Ionicons name="qr-code-outline" size={24} color="white" />
+          <Ionicons name="camera" size={24} color="white" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.toolItem} onPress={() => {
           navigation.navigate('numberScreenStack')
@@ -126,7 +126,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   toolItem: {
-    width: 30
+    width: 30,
+    marginRight: 20
   },
   searchKeyContainer: {
     width: width - 170

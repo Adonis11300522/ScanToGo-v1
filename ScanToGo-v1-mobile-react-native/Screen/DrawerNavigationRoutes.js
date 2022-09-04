@@ -15,13 +15,14 @@ import CustomSidebarMenu from './Components/CustomSidebarMenu';
 import NavigationDrawerHeader from './Components/NavigationDrawerHeader';
 import DetailScreen from './DetailScreen';
 import PageNumberScreen from './PageNumberScreen';
-import QrscannerScreen from "./QrscannerScreen"
+import ScanScreen from "./ScanScreen"
 import ExcelViewer from './Components/ExcelViewer';
+import MemberShipScreen from './MemberShipScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const homeScreenStack = ({ navigation }) => {
+const HomeScreenStack = ({ navigation }) => {
   return (
     <Stack.Navigator initialRouteName="HomeScreen">
       <Stack.Screen
@@ -45,7 +46,7 @@ const homeScreenStack = ({ navigation }) => {
   );
 };
 
-const detailScreenStack = ({ navigation }) => {
+const DetailScreenStack = ({ navigation }) => {
   return (
     <Stack.Navigator
       initialRouteName="DetailScreen"
@@ -72,7 +73,7 @@ const detailScreenStack = ({ navigation }) => {
   );
 };
 
-const numberScreenStack = ({ navigation }) => {
+const NumberScreenStack = ({ navigation }) => {
   return (
     <Stack.Navigator
       initialRouteName="NumberScreen"
@@ -99,9 +100,34 @@ const numberScreenStack = ({ navigation }) => {
   );
 };
 
+const MemberShipScreenStack = ({ navigation }) => {
+  return (
+    <Stack.Navigator
+      initialRouteName="MemberShipScreen"
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerHeader navigationProps={navigation} />
+        ),
+        headerStyle: {
+          backgroundColor: '#0049EE', //Set Header color
+        },
+        headerTintColor: '#fff', //Set Header text color
+        headerTitleStyle: {
+          fontWeight: 'bold', //Set Header text style
+        },
+      }}>
+      <Stack.Screen
+        name="MemberShipScreen"
+        component={MemberShipScreen}
+        options={{
+          title: 'MemberShip', //Set Header Title
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
 
-
-const settingScreenStack = ({ navigation }) => {
+const SettingScreenStack = ({ navigation }) => {
   return (
     <Stack.Navigator
       initialRouteName="SettingsScreen"
@@ -128,10 +154,10 @@ const settingScreenStack = ({ navigation }) => {
   );
 };
 
-const qrscannerScreenStack = ({ navigation }) => {
+const ScanScreenStack = ({ navigation }) => {
   return (
     <Stack.Navigator
-      initialRouteName="QrscannerScreen"
+      initialRouteName="ScanScreen"
       screenOptions={{
         headerLeft: () => (
           <NavigationDrawerHeader navigationProps={navigation} />
@@ -145,15 +171,16 @@ const qrscannerScreenStack = ({ navigation }) => {
         },
       }}>
       <Stack.Screen
-        name="QrscannerScreen"
-        component={QrscannerScreen}
+        name="ScanScreen"
+        component={ScanScreen}
         options={{
-          title: 'Qr Scanner', //Set Header Title
+          title: 'Scan Screen', //Set Header Title
         }}
       />
     </Stack.Navigator>
   );
 };
+
 
 const DrawerNavigatorRoutes = (props) => {
   return (
@@ -169,34 +196,39 @@ const DrawerNavigatorRoutes = (props) => {
       screenOptions={{ headerShown: false }}
       drawerContent={CustomSidebarMenu}>
       <Drawer.Screen
-        name="homeScreenStack"
+        name="HomeScreenStack"
         options={{ drawerLabel: 'Home Screen' }}
-        component={homeScreenStack}
+        component={HomeScreenStack}
       />
       <Drawer.Screen
-        name="detailScreenStack"
+        name="DetailScreenStack"
         options={{ drawerLabel: 'Detail Screen' }}
-        component={detailScreenStack}
+        component={DetailScreenStack}
       />
       <Drawer.Screen
-        name="excelScreenStack"
+        name="ExcelScreenStack"
         options={{ drawerLabel: 'Excel Screen' }}
         component={ExcelViewer}
       />
       <Drawer.Screen
-        name="numberScreenStack"
+        name="NumberScreenStack"
         options={{ drawerLabel: 'Number Screen' }}
-        component={numberScreenStack}
+        component={NumberScreenStack}
       />
       <Drawer.Screen
-        name="settingScreenStack"
+        name="SettingScreenStack"
         options={{ drawerLabel: 'Setting Screen' }}
-        component={settingScreenStack}
+        component={SettingScreenStack}
+      />
+       <Drawer.Screen
+        name="MemberShipScreenStack"
+        options={{ drawerLabel: 'Membership Screen' }}
+        component={MemberShipScreenStack}
       />
       <Drawer.Screen
-        name="qrscannerScreenStack"
-        options={{ drawerLabel: 'QrScanner Screen' }}
-        component={qrscannerScreenStack}
+        name="ScanScreenStack"
+        options={{ drawerLabel: 'Scan Screen' }}
+        component={ScanScreenStack}
       />
     </Drawer.Navigator>
   );

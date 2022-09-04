@@ -1,7 +1,3 @@
-// Example of Splash, Login and Sign Up in React Native
-// https://aboutreact.com/react-native-login-and-signup/
-
-// Import React and Component
 import React, { useState, createRef } from 'react';
 import {
   StyleSheet,
@@ -23,7 +19,7 @@ const RegisterScreen = (props) => {
   const [lastName, setLastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
   const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
@@ -32,9 +28,10 @@ const RegisterScreen = (props) => {
   const lastNameInputRef = createRef();
   const emailInputRef = createRef();
   const passwordInputRef = createRef();
-  const confirmPasswordInputRef = createRef();
+  const phoneNumberInputRef = createRef();
 
   const handleSubmitButton = () => {
+    
     setErrortext('');
     if (!firstName) {
       alert('Please fill First Name');
@@ -52,7 +49,7 @@ const RegisterScreen = (props) => {
       alert('Please fill Password');
       return;
     }
-    if (!confirmPassword) {
+    if (!phoneNumber) {
       alert('Please fill Confirm Password');
       return;
     }
@@ -60,16 +57,11 @@ const RegisterScreen = (props) => {
       alert("Password length has to logger than 6")
       return;
     }
-    if(password !== confirmPassword){
-      alert('Please check Password')
-      return;
-    }
 
-    signUpApi(firstName, lastName, userEmail, password, confirmPassword)
+    signUpApi(firstName, lastName, userEmail, password, phoneNumber)
       .then((res) => {
         setLoading(false);
-        console.log(res)
-        if(res.status === 'success'){
+        if(res.status === true){
           setIsRegistraionSuccess(true);
         }else{
           setErrortext('Registration Unsuccessful');
@@ -219,6 +211,22 @@ const RegisterScreen = (props) => {
           <View style={styles.SectionStyle}>
             <TextInput
               style={styles.inputStyle}
+              onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
+              underlineColorAndroid="#f000"
+              placeholder="Enter PhoneNumber"
+              placeholderTextColor="#8b9cb5"
+              autoCapitalize="sentences"
+              returnKeyType="next"
+              ref={phoneNumberInputRef}
+              onSubmitEditing={() =>
+                phoneNumberInputRef.current && phoneNumberInputRef.current.focus()
+              }
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={styles.SectionStyle}>
+            <TextInput
+              style={styles.inputStyle}
               onChangeText={(password) => setPassword(password)}
               underlineColorAndroid="#f000"
               placeholder="Enter Password"
@@ -229,21 +237,6 @@ const RegisterScreen = (props) => {
               onSubmitEditing={() =>
                 confirmPasswordInputRef.current && confirmPasswordInputRef.current.focus()
               }
-              blurOnSubmit={false}
-            />
-          </View>
-          <View style={styles.SectionStyle}>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(confirmPass) => setConfirmPassword(confirmPass)}
-              underlineColorAndroid="#f000"
-              placeholder="Reenter Password"
-              placeholderTextColor="#8b9cb5"
-              autoCapitalize="sentences"
-              ref={confirmPasswordInputRef}
-              returnKeyType="next"
-              secureTextEntry={true}
-              onSubmitEditing={Keyboard.dismiss}
               blurOnSubmit={false}
             />
           </View>

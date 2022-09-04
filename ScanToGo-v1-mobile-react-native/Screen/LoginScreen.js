@@ -13,6 +13,7 @@ import {
   Keyboard,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Picker
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,6 +21,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from './Components/Loader';
 import { loginApi } from "../api/api";
 import { useGlobalState } from "state-pool";
+import { I18n } from 'i18n-js';
+import Language from '../assets/Language.json';
+
 
 const LoginScreen = ({ navigation }) => {
   const [userEmail, setUserEmail] = useState('');
@@ -27,41 +31,52 @@ const LoginScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
   const [token, setToken, updateToken] = useGlobalState('token');
-  const [userID, setUserID, updateUserID] = useGlobalState('userID')
+  const [userID, setUserID, updateUserID] = useGlobalState('userID');
+  const [locale, setLocale] = useState('en-DE');
+  const [selectedValue, setSelectedValue] = useState("java");
+  const getLocal = async () => {
+    const locale = await AsyncStorage.getItem('locale');
+    setLocale(locale);
+  }
 
+  getLocal();
   const passwordInputRef = createRef();
+  const i18n = new I18n(Language);
+  i18n.locale = locale;
+  i18n.enableFallback = true;
+  
 
   const handleSubmitPress = () => {
-    navigation.replace('DrawerNavigationRoutes');
-    // setErrortext('');
-    // if (!userEmail) {
-    //   alert('Please fill Email');
-    //   return;
-    // }
-    // if (!userPassword) {
-    //   alert('Please fill Password');
-    //   return;
-    // }
-    // setLoading(true);
+    // navigation.replace('DrawerNavigationRoutes');
+    setErrortext('');
+    if (!userEmail) {
+      alert(i18n.t("ALERTS.EmailInputAlert"));
+      return;
+    }
+    if (!userPassword) {
+      alert(i18n.t("ALERTS.PasswordInputAlert"));
+      return;
+    }
+    setLoading(true);
 
-    // loginApi(userEmail, userPassword)
-    //   .then(async (res) => {
-    //     setLoading(false);
-    //     if (res.status === 'success') {
-    //       await AsyncStorage.setItem('user_email', userEmail);
-    //       await AsyncStorage.setItem('token', res.data);
-    //       await AsyncStorage.setItem('user_id', res.id.toString());
-    //       await updateToken((old) => { return res.data });
-    //       await updateUserID((old) => { return res.id.toString() });
-
-    //       navigation.replace('DrawerNavigationRoutes');
-    //     }
-    //     else
-    //       setErrortext('Please check your email id or password');
-    //   })
-    //   .catch((e) => {
-    //     setLoading(false);
-    //   })
+    loginApi(userEmail, userPassword)
+      .then(async (res) => {
+        setLoading(false);
+        if (res.status === true) {
+          await AsyncStorage.setItem('user_email', userEmail);
+          await AsyncStorage.setItem('api_token', res.data.apiToken);
+          await AsyncStorage.setItem('user_id', res.data.id.toString());
+          await updateToken((old) => { return res.data.apiToken });
+          await updateUserID((old) => { return res.data.id.toString() });
+          
+          navigation.replace('DrawerNavigationRoutes');
+        }
+        else
+          setErrortext(i18n.t("ALERTS.WrongInfo"));
+      })
+      .catch((e) => {
+        setLoading(false);
+      })
   };
 
   return (
@@ -78,8 +93,8 @@ const LoginScreen = ({ navigation }) => {
           <Image
             source={require('../Image/LOGO.png')}
             style={{
-              width: 70,
-              height: 70,
+              width: 100,
+              height: 100,
               resizeMode: 'contain',
               marginBottom: 30,
             }}
@@ -91,7 +106,7 @@ const LoginScreen = ({ navigation }) => {
               <TextInput
                 style={styles.inputStyle}
                 onChangeText={(UserEmail) => setUserEmail(UserEmail)}
-                placeholder="Enter Email" //dummy@abc.com
+                placeholder={i18n.t("INPUTS.Email")} //dummy@abc.com
                 placeholderTextColor="#8b9cb5"
                 autoCapitalize="none"
                 keyboardType="email-address"
@@ -107,7 +122,7 @@ const LoginScreen = ({ navigation }) => {
               <TextInput
                 style={styles.inputStyle}
                 onChangeText={(UserPassword) => setUserPassword(UserPassword)}
-                placeholder="Enter Password" //12345
+                placeholder={i18n.t("INPUTS.Password")} //12345
                 placeholderTextColor="#8b9cb5"
                 keyboardType="default"
                 ref={passwordInputRef}
@@ -125,13 +140,20 @@ const LoginScreen = ({ navigation }) => {
               style={styles.buttonStyle}
               activeOpacity={0.5}
               onPress={handleSubmitPress}>
-              <Text style={styles.buttonTextStyle}>LOGIN</Text>
+              <Text style={styles.buttonTextStyle}>{i18n.t("BUTTONS.Login")}</Text>
             </TouchableOpacity>
+            <View style={styles.BottomSectionStyle}>
             <Text
               style={styles.registerTextStyle}
               onPress={() => navigation.navigate('RegisterScreen')}>
-              New Here ? Register
+              {i18n.t("BUTTONS.CreateAccount")}
             </Text>
+            <Text
+              style={styles.registerTextStyle}
+              onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+              {i18n.t("BUTTONS.ForgotPassword")}
+            </Text>
+            </View>
           </KeyboardAvoidingView>
         </View>
       </ScrollView>
@@ -153,6 +175,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
+    margin: 10,
+  },
+  BottomSectionStyle: {
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    alignItems:'center',
+    height: 40,
     margin: 10,
   },
   loginContainer: {

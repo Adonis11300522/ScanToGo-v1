@@ -12,7 +12,6 @@ import PageFooter from '../Components/PageFooter';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native"
 
-
 let flatList = null;
 
 const HomeScreen = () => {
@@ -28,6 +27,7 @@ const HomeScreen = () => {
   const [loading, setLoading] = useState(false)
 
   const navigation = useNavigation();
+  
 
   useEffect(() => {
     updateSearchFlag((old) => { return false })
@@ -59,7 +59,6 @@ const HomeScreen = () => {
       getFiles(userID, searchString, indexPage + 1, perPage)
         .then(async (res) => {
           setLoading(false)
-          // console.log(res.data)
           await updateFileData((old) => {
             return old.concat(res.data);
           })
